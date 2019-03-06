@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" class="outline">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket.IO MineSweeper</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h3 style="text-align: center; width: 900px">Sweeper</h3>
+    <div class="GameBoard">
+      <% for(var i=0;i<16;i++){ %>
+        <div class="row">
+          <%for(var j=0;j<30;j++){%>
+            <div class="cell" id=<%= (j+1)+","+(i+1) %>>a</div>
+          <%}%>
+        </div>
+      <%}%>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
