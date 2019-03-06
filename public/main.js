@@ -2,15 +2,24 @@
 
 (function() {
   var socket = io();
-  var board = document.getElementsByClassName("outline");
-  board.addEventListener("mouseover", mv, false);
+  var infoBoard = document.getElementsByClassName("InfoBoard"),
+    title = document.getElementsByClassName("title");
+  socket.on("joined", function(e) {
+    title[0].innerHTML = `Socket id: ${socket.id} (online: ${e.idx})`;
+
+    var strv = "";
+    e.v.forEach(function(x, index) {
+      strv += `<div class="row">${index + 1}. ${x.substring(0, 5)}...</div>`;
+    });
+    infoBoard[0].innerHTML = strv;
+  });
+
   var cells = document.getElementsByClassName("cell");
   for (var i = 0; i < cells.length; i++) {
     cells[i].addEventListener("mouseover", mv, false);
   }
-
   function mv(e) {
-    console.log(e);
+    console.log(e, socket.id);
     console.log("From:", e.fromElement.id);
     console.log("Target:", e.srcElement.id);
   }
