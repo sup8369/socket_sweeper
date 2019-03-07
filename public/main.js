@@ -6,7 +6,7 @@
   var infoBoard = document.getElementsByClassName("InfoBoard"),
     title = document.getElementsByClassName("title");
   socket.on("joined", function(e) {
-    title[0].innerHTML = `socketId: ${socket.id} (online: ${e.cnt})`;
+    title[0].innerHTML = `socket Id: ${socket.id} (online: ${e.cnt})`;
     socket_local_id = e.v.indexOf(socket.id);
     var strv = "";
     e.v.forEach(function(x, index) {
