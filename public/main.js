@@ -10,7 +10,21 @@
   var lastClicked;
   var multiClicked = [];
   socket.on("init", function(e) {
-    socket_local_id = e;
+    socket_local_id = e.idx;
+    for (var i = 0; i < 60; i++) {
+      for (var j = 0; j < 32; j++) {
+        console.log(e.svd[i][j]);
+        if (e.svd[i][j] !== 0) {
+          if (e.svd[i][j] === -1) {
+            document.getElementById(`${i},${j}`).innerHTML = "🚩";
+          } else if (e.svd[i][j] === -2) {
+            document.getElementById(`${i},${j}`).innerHTML = "💣";
+          } else {
+            document.getElementById(`${i},${j}`).innerHTML = e.svd[i][j] - 1;
+          }
+        }
+      }
+    }
   });
 
   /* Player Joined */
@@ -27,7 +41,9 @@
 
   /* On SocketBroad */
   socket.on("setflag", function(e) {
-    document.getElementById(e.pos).innerHTML = e.res;
+    var _ = document.getElementById(e.pos);
+    _.innerHTML = e.res;
+    // _.id = "";
   });
 
   /* Players On Hover */
@@ -72,6 +88,9 @@
     multiClicked = [];
     if (lastClicked === e.target) {
       switch (e.which) {
+        case 1:
+          socket.emit("findz", e.target.id);
+          break;
         case 3:
           socket.emit("flaged", e.target.id);
           break;

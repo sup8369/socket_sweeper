@@ -72,9 +72,11 @@ body {
   border: 1px solid white;
   display: table-cell;
   height: 30px;
+  font-size: 0.94em;
   width: 30px;
+  line-height: 30px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.699);
+  color: rgba(10, 10, 10, 0.699);
 }
 
 .InfoBoard {

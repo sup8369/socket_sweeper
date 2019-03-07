@@ -24,7 +24,7 @@ function initializing() {
     }
   }
 
-  for (i = 0; i < 360; i++) {
+  for (i = 0; i < 310; i++) {
     var a, b;
     while (1) {
       a = Math.floor(Math.random() * 60);
@@ -80,18 +80,48 @@ io.on("connection", function(socket) {
   console.log("[+] " + socket.id);
   users.push(socket.id);
   allusers.push(socket.id);
-  socket.emit("init", allusers.indexOf(socket.id));
+  socket.emit("init", { idx: allusers.indexOf(socket.id), svd: gameBoard });
   io.emit("joined", {
     cnt: io.engine.clientsCount,
     v: users
   });
+  socket.on("findz", function(e) {
+    var sp = e.split(",");
+    var resSign = "";
+    console.log("FINDZREQ:", sp);
+    if (gameBoard[parseInt(sp[0])][parseInt(sp[1])] === 0) {
+      if (servBoard[parseInt(sp[0])][parseInt(sp[1])] === -2) {
+        gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -2;
+        resSign = "💣";
+      } else {
+        var cnt = 0,
+          y = parseInt(sp[1]) - 1;
+        for (i = 0; i < 3; i++) {
+          var x = parseInt(sp[0]) - 1;
+          for (j = 0; j < 3; j++) {
+            if (x < 0 || x > 60 || y < 0 || y > 32) continue;
+            if (servBoard[x][y] === -2) cnt++;
+            x++;
+          }
+
+          y++;
+        }
+
+        resSign = cnt;
+        gameBoard[parseInt(sp[0])][parseInt(sp[1])] = parseInt(cnt) + 1;
+        //remove life
+      }
+      io.emit("setflag", { pos: e, res: resSign });
+    }
+  });
   socket.on("flaged", function(e) {
+    if (e.length < 2) return;
     var sp = e.split(",");
     var resSign = "";
     console.log("FLAGREQ:", sp);
-    if (gameBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] === 0) {
-      if (servBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] === -2) {
-        gameBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] = -1;
+    if (gameBoard[parseInt(sp[0])][parseInt(sp[1])] === 0) {
+      if (servBoard[parseInt(sp[0])][parseInt(sp[1])] === -2) {
+        gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -1;
         resSign = "🚩";
       } else {
         //gameBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] = -2;
