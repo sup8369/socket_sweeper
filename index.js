@@ -9,9 +9,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
-  await res.render("index", {
-    title: "Your SocketID"
-  });
+  await res.render("index");
 });
 app.use(express.static(__dirname + "/public"));
 
