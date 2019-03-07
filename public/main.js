@@ -42,6 +42,7 @@
     }[${socket_local_id}] (online: ${e.cnt})`;
     var strv = "";
     e.v.forEach((x, index) => {
+      if(index > 6) break;
       strv += `<div class="row">${index + 1}. ${x.substring(0, 5)}...</div>`;
     });
     infoBoard[0].innerHTML = strv;
