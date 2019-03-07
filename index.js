@@ -99,7 +99,7 @@ io.on("connection", function(socket) {
         for (i = 0; i < 3; i++) {
           var x = parseInt(sp[0]) - 1;
           for (j = 0; j < 3; j++) {
-            if (x < 0 || x > 60 || y < 0 || y > 32) continue;
+            if (x < 0 || x > 59 || y < 0 || y > 31) continue;
             if (servBoard[x][y] === -2) cnt++;
             x++;
           }
