@@ -84,6 +84,7 @@ function process(x, y, io) {
   for (var i = x - 1; i <= x + 1; i++) {
     for (var j = y - 1; j <= y + 1; j++) {
       if (i < 0 || i > 59 || j < 0 || j > 31) continue;
+      if (j > 1 && j < 13 && i > 53) continue;
       if (servBoard[i][j] == -2) {
         mine_num++;
       }
