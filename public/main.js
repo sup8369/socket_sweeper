@@ -7,7 +7,8 @@
   var socket_local_id = -1;
   var infoBoard = document.getElementsByClassName("InfoBoard");
   var title = document.getElementsByClassName("title");
-
+  var lastClicked;
+  var multiClicked = [];
   socket.on("init", function(e) {
     socket_local_id = e;
   });
@@ -22,6 +23,11 @@
       strv += `<div class="row">${index + 1}. ${x.substring(0, 5)}...</div>`;
     });
     infoBoard[0].innerHTML = strv;
+  });
+
+  /* On SocketBroad */
+  socket.on("setflag", function(e) {
+    document.getElementById(e.pos).innerHTML = e.res;
   });
 
   /* Players On Hover */
@@ -42,10 +48,41 @@
   var cells = document.getElementsByClassName("cell");
   for (var i = 0; i < cells.length; i++) {
     cells[i].addEventListener("mouseover", mv, false);
+    cells[i].addEventListener("mouseup", cl, false);
+    cells[i].addEventListener("mousedown", bold, false);
+    cells[i].addEventListener("contextmenu", rcl, false);
   }
 
   /* Cells Hover Event */
   function mv(e) {
     socket.emit("hover", { pos: e.srcElement.id, idx: socket_local_id });
+  }
+
+  /* Cells Select Highlight */
+  function bold(e) {
+    lastClicked = e.target;
+    multiClicked.push(e.target);
+    e.target.style.backgroundColor = "#777";
+  }
+
+  /* Cells Click Event */
+  function cl(e) {
+    for (i = 0; i < multiClicked.length; i++)
+      multiClicked[i].style.backgroundColor = "";
+    multiClicked = [];
+    if (lastClicked === e.target) {
+      switch (e.which) {
+        case 3:
+          socket.emit("flaged", e.target.id);
+          break;
+      }
+    }
+
+    console.log(e);
+  }
+
+  /* Cells RightClick Event */
+  function rcl(e) {
+    e.preventDefault();
   }
 })();
