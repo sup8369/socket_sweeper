@@ -78,7 +78,15 @@ Array.prototype.remove = function() {
   return this;
 };
 function process(x, y, io) {
-  if (x < 0 || x > 59 || y < 0 || y > 31 || checkBoard[x][y] == 1) return;
+  if (
+    x < 0 ||
+    x > 59 ||
+    y < 0 ||
+    y > 31 ||
+    (y > 1 && y < 13 && x > 53) ||
+    checkBoard[x][y] == 1
+  )
+    return;
   checkBoard[x][y] = 1;
   var mine_num = 0;
   for (var i = x - 1; i <= x + 1; i++) {
