@@ -13,7 +13,7 @@
     socket_local_id = e.idx;
     for (var i = 0; i < 60; i++) {
       for (var j = 0; j < 32; j++) {
-        console.log(e.svd[i][j]);
+        //console.log(e.svd[i][j]);
         if (e.svd[i][j] !== 0) {
           document.getElementById(`${i},${j}`).style.cssText =
             "background: rgba(133, 133, 133, 0.322)";
@@ -62,7 +62,7 @@
       var hovcells = document.getElementsByClassName("hov");
       for (var i = 0; i < hovcells.length; i++) hovcells[i].className = "cell";
     }
-    console.log(e.cursors);
+    //console.log(e.cursors);
     for (var i = 0; i < e.cursors.length; i++) {
       if (e.cursors[i] === null) continue;
       var spl = e.cursors[i].split("x");
@@ -112,7 +112,7 @@
       }
     }
 
-    console.log(e);
+    //console.log(e);
   }
 
   /* Cells RightClick Event */
