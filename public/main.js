@@ -34,6 +34,5 @@
   }
   function mv(e) {
     socket.emit("hover", { pos: e.srcElement.id, idx: socket_local_id });
-    //console.log(e.srcElement.id, socket.id);
   }
 })();
