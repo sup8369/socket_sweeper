@@ -67,14 +67,16 @@ body {
   -moz-box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 170);
   box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 170);
 }
-
+#used {
+  background-color: rgba(133, 133, 133, 0.322) !important;
+}
 .cell {
   border: 1px solid white;
   display: table-cell;
-  height: 30px;
+  height: 40px;
   font-size: 0.94em;
-  width: 30px;
-  line-height: 30px;
+  width: 40px;
+  line-height: 38px;
   text-align: center;
   color: rgba(10, 10, 10, 0.699);
 }
@@ -92,6 +94,6 @@ body {
   padding: 10px;
 }
 .GameBoard {
-  width: 1800px;
+  width: 2400px;
   background: rgb(223, 223, 223);
 }

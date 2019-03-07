@@ -15,12 +15,20 @@
       for (var j = 0; j < 32; j++) {
         console.log(e.svd[i][j]);
         if (e.svd[i][j] !== 0) {
+          document.getElementById(`${i},${j}`).style.cssText =
+            "background: rgba(133, 133, 133, 0.322)";
+
           if (e.svd[i][j] === -1) {
             document.getElementById(`${i},${j}`).innerHTML = "🚩";
           } else if (e.svd[i][j] === -2) {
             document.getElementById(`${i},${j}`).innerHTML = "💣";
           } else {
-            document.getElementById(`${i},${j}`).innerHTML = e.svd[i][j] - 1;
+            if (e.svd[i][j] == 1) {
+              document.getElementById(`${i},${j}`).innerHTML = "";
+            } else {
+              document.getElementById(`${i},${j}`).innerHTML =
+                e.svd[i][j] - 1 + "";
+            }
           }
         }
       }
@@ -42,7 +50,9 @@
   /* On SocketBroad */
   socket.on("setflag", function(e) {
     var _ = document.getElementById(e.pos);
-    _.innerHTML = e.res;
+    if (e.res !== 0) _.innerHTML = e.res;
+    else _.innerHTML = "";
+    _.style.cssText = "background: rgba(133, 133, 133, 0.322)";
     // _.id = "";
   });
 
@@ -78,13 +88,18 @@
   function bold(e) {
     lastClicked = e.target;
     multiClicked.push(e.target);
+    if ((e.target.style.backgroundColor + "").includes("rgba")) return;
     e.target.style.backgroundColor = "#777";
   }
 
   /* Cells Click Event */
   function cl(e) {
-    for (i = 0; i < multiClicked.length; i++)
+    for (i = 0; i < multiClicked.length; i++) {
+      if ((multiClicked[i].style.backgroundColor + "").includes("rgba"))
+        continue;
       multiClicked[i].style.backgroundColor = "";
+    }
+
     multiClicked = [];
     if (lastClicked === e.target) {
       switch (e.which) {

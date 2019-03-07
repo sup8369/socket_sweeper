@@ -26,7 +26,7 @@ function initializing() {
     }
   }
 
-  for (i = 0; i < 310; i++) {
+  for (i = 0; i < 360; i++) {
     var a, b;
     while (1) {
       a = Math.floor(Math.random() * 60);
@@ -53,7 +53,7 @@ function initializing() {
     console.log(debug);
   }
 
-  console.log("INITIALIZED SUCCESSFULLY.");
+  console.log("INITIALIZED SUCCESSFULLY. CURRENT RATIO: " + (60 * 32) / 360);
 }
 initializing();
 app.set("views", __dirname + "/views");
@@ -115,6 +115,7 @@ io.on("connection", function(socket) {
   });
   socket.on("findz", function(e) {
     var sp = e.split(",");
+
     var resSign = "";
     console.log("FINDZREQ:", sp);
     if (gameBoard[parseInt(sp[0])][parseInt(sp[1])] === 0) {
@@ -124,7 +125,6 @@ io.on("connection", function(socket) {
 
         io.emit("setflag", { pos: e, res: resSign });
       } else {
-        var cnt = 0;
         process(parseInt(sp[0]), parseInt(sp[1]), io);
 
         //resSign = cnt;
@@ -142,12 +142,13 @@ io.on("connection", function(socket) {
       if (servBoard[parseInt(sp[0])][parseInt(sp[1])] === -2) {
         gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -1;
         resSign = "🚩";
+
+        io.emit("setflag", { pos: e, res: resSign });
       } else {
         //gameBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] = -2;
         //resSign = "💣";
         //remove life
       }
-      io.emit("setflag", { pos: e, res: resSign });
     }
   });
 
