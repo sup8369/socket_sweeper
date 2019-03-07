@@ -42,7 +42,13 @@ io.on("connection", function(socket) {
 
   socket.on("disconnect", function() {
     console.log("[-] " + socket.id);
+    cursors[users.indexOf(socket.id)] = null;
     users.remove(socket.id);
+    io.emit("inhover", { cursors });
+    io.emit("joined", {
+      cnt: io.engine.clientsCount,
+      v: users
+    });
   });
 
   socket.on("hover", function(data) {

@@ -6,7 +6,7 @@
   var infoBoard = document.getElementsByClassName("InfoBoard"),
     title = document.getElementsByClassName("title");
   socket.on("joined", function(e) {
-    title[0].innerHTML = `Socket id: ${socket.id} (online: ${e.cnt})`;
+    title[0].innerHTML = `socketId: ${socket.id} (online: ${e.cnt})`;
     socket_local_id = e.v.indexOf(socket.id);
     var strv = "";
     e.v.forEach(function(x, index) {
@@ -19,9 +19,7 @@
 
     while (document.getElementsByClassName("hov").length !== 0)
       for (var i = 0; i < hovcells.length; i++) hovcells[i].className = "cell";
-    console.log(hovcells.length);
     var hovcells = document.getElementsByClassName("hov");
-    console.log(hovcells.length);
     for (var i = 0; i < e.cursors.length; i++) {
       e.cursors[i] !== null
         ? (document.getElementById(e.cursors[i]).className = `cell hov co${i %
