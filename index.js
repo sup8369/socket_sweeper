@@ -4,6 +4,7 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
 var users = [];
+var allusers = [];
 var cursors = [];
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -13,9 +14,6 @@ app.get("/", async (req, res) => {
 });
 app.use(express.static(__dirname + "/public"));
 
-function onConnection(socket) {
-  socket.on("drawing", data => socket.broadcast.emit("drawing", data));
-}
 Array.prototype.remove = function() {
   var what,
     a = arguments,
@@ -33,6 +31,8 @@ Array.prototype.remove = function() {
 io.on("connection", function(socket) {
   console.log("[+] " + socket.id);
   users.push(socket.id);
+  allusers.push(socket.id);
+  socket.emit("init", allusers.indexOf(socket.id));
   io.emit("joined", {
     cnt: io.engine.clientsCount,
     v: users
@@ -40,9 +40,13 @@ io.on("connection", function(socket) {
 
   socket.on("disconnect", function() {
     console.log("[-] " + socket.id);
-    cursors[users.indexOf(socket.id)] = null;
+    cursors[allusers.indexOf(socket.id)] = null;
     users.remove(socket.id);
-    io.emit("inhover", { cursors });
+    const rec = [];
+    cursors.forEach(function(x, index) {
+      if (x !== null) rec.push(`${index}x${x}`);
+    });
+    io.emit("inhover", { cursors: rec });
     io.emit("joined", {
       cnt: io.engine.clientsCount,
       v: users
@@ -51,7 +55,11 @@ io.on("connection", function(socket) {
 
   socket.on("hover", function(data) {
     cursors[data.idx] = data.pos;
-    io.emit("inhover", { cursors });
+    const rec = [];
+    cursors.forEach(function(x, index) {
+      if (x !== null) rec.push(`${index}x${x}`);
+    });
+    io.emit("inhover", { cursors: rec });
     console.log(data.idx, data.pos);
   });
 });
