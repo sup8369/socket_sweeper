@@ -2,13 +2,14 @@ const express = require("express");
 const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
+const port = 3000;
 var users = [],
   allusers = [],
   cursors = [],
   blockOpened = 0,
   servBoard = new Array(60),
   gameBoard = new Array(60),
+  checkBoard = new Array(60),
   userBoard = new Array(60);
 
 function initializing() {
@@ -17,6 +18,7 @@ function initializing() {
     gameBoard[i] = new Array(32);
     userBoard[i] = new Array(32);
     servBoard[i] = new Array(32);
+    checkBoard[i] = new Array(32);
     for (j = 0; j < 32; j++) {
       gameBoard[i][j] = 0;
       userBoard[i][j] = "";
@@ -75,7 +77,33 @@ Array.prototype.remove = function() {
   }
   return this;
 };
+function process(x, y, io) {
+  if (x < 0 || x > 59 || y < 0 || y > 31 || checkBoard[x][y] == 1) return;
+  checkBoard[x][y] = 1;
+  var mine_num = 0;
+  for (var i = x - 1; i <= x + 1; i++) {
+    for (var j = y - 1; j <= y + 1; j++) {
+      if (i < 0 || i > 59 || j < 0 || j > 31) continue;
+      if (servBoard[i][j] == -2) {
+        mine_num++;
+      }
+    }
+  }
+  if (mine_num > 0) {
+    gameBoard[x][y] = mine_num + 1;
+    io.emit("setflag", { pos: `${x},${y}`, res: mine_num });
+    return;
+  } else {
+    gameBoard[x][y] = 1;
 
+    io.emit("setflag", { pos: `${x},${y}`, res: 0 });
+    for (var i = x - 1; i <= x + 1; i++) {
+      for (var j = y - 1; j <= y + 1; j++) {
+        process(i, j, io);
+      }
+    }
+  }
+}
 io.on("connection", function(socket) {
   console.log("[+] " + socket.id);
   users.push(socket.id);
@@ -93,25 +121,16 @@ io.on("connection", function(socket) {
       if (servBoard[parseInt(sp[0])][parseInt(sp[1])] === -2) {
         gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -2;
         resSign = "💣";
+
+        io.emit("setflag", { pos: e, res: resSign });
       } else {
-        var cnt = 0,
-          y = parseInt(sp[1]) - 1;
-        for (i = 0; i < 3; i++) {
-          var x = parseInt(sp[0]) - 1;
-          for (j = 0; j < 3; j++) {
-            if (x < 0 || x > 59 || y < 0 || y > 31) continue;
-            if (servBoard[x][y] === -2) cnt++;
-            x++;
-          }
+        var cnt = 0;
+        process(parseInt(sp[0]), parseInt(sp[1]), io);
 
-          y++;
-        }
-
-        resSign = cnt;
-        gameBoard[parseInt(sp[0])][parseInt(sp[1])] = parseInt(cnt) + 1;
+        //resSign = cnt;
+        //gameBoard[parseInt(sp[0])][parseInt(sp[1])] = parseInt(cnt) + 1;
         //remove life
       }
-      io.emit("setflag", { pos: e, res: resSign });
     }
   });
   socket.on("flaged", function(e) {
