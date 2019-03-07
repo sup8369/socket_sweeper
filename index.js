@@ -4,7 +4,7 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
 var users = [];
-
+var cursors = [];
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
@@ -35,11 +35,20 @@ Array.prototype.remove = function() {
 io.on("connection", function(socket) {
   console.log("[+] " + socket.id);
   users.push(socket.id);
-  io.emit("joined", { idx: io.engine.clientsCount, v: users });
+  io.emit("joined", {
+    cnt: io.engine.clientsCount,
+    v: users
+  });
 
   socket.on("disconnect", function() {
     console.log("[-] " + socket.id);
     users.remove(socket.id);
+  });
+
+  socket.on("hover", function(data) {
+    cursors[data.idx] = data.pos;
+    io.emit("inhover", { cursors });
+    console.log(data.idx, data.pos);
   });
 });
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="outline">
+<html lang="en" class="outline dragscroll">
   <head>
     <meta charset="UTF-8" />
     <title>Socket.IO MineSweeper</title>
@@ -10,10 +10,11 @@
       <h3 class="title">Sweeper</h3>
     </div>
     <div class="GameBoard">
-      <% for(var i=0;i<48;i++){ %>
+      <% for(var i=0;i<32;i++){ %>
         <div class="row">
-          <%for(var j=0;j<90;j++){%>
-            <div class="cell" id=<%= (j+1)+","+(i+1) %>>*</div>
+          <%for(var j=0;j<60;j++){%>
+            <%if(i<15&&j>53) continue;%>
+            <div class="cell" id=<%= (j+1)+","+(i+1) %>> </div>
           <%}%>
         </div>
       <%}%>
@@ -25,7 +26,7 @@
         
           
     </div>
-      
+    <script src="/dragscroll.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/main.js"></script>
   </body>
