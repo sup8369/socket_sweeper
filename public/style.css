@@ -13,10 +13,71 @@ body {
   padding: 0;
 }
 .titleWrapper {
+  pointer-events: none;
   position: fixed;
   left: 50%;
   top: 3%;
 }
+.debugLog {
+  position: fixed;
+  left: 50%;
+  bottom: 10%;
+  pointer-events: none;
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.initial {
+  position: fixed;
+  z-index: 11;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  text-align: center;
+}
+.initial > input {
+  border: 0;
+  width: 50%;
+  font-size: 40px;
+  line-height: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 10px;
+  background: transparent;
+  color: #bbdefb;
+}
+
+.initial > input:focus {
+  outline: 0;
+  color: #bbdefb;
+}
+
+.initial > input::placeholder {
+  color: #1976d2;
+}
+.logRow {
+  text-align: center;
+  position: relative;
+  left: -50%;
+  height: 100px;
+  color: rgb(51, 51, 51);
+}
+
+#positive {
+  text-shadow: 0 0 2px rgb(255, 0, 0);
+}
+#negative {
+  text-shadow: 0 0 2px rgb(0, 47, 255);
+}
+
 .title {
   text-align: center;
   position: relative;
@@ -27,45 +88,45 @@ body {
   display: table-row;
 }
 .co0 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px #f00;
-  -moz-box-shadow: inset 0px 0px 0px 2px #f00;
-  box-shadow: inset 0px 0px 0px 2px #f00;
+  -webkit-box-shadow: inset 0px 0px 0px 3px #f00;
+  -moz-box-shadow: inset 0px 0px 0px 3px #f00;
+  box-shadow: inset 0px 0px 0px 3px #f00;
 }
 
 .co1 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(255, 145, 0);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(255, 145, 0);
-  box-shadow: inset 0px 0px 0px 2px rgb(255, 145, 0);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(255, 145, 0);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(255, 145, 0);
+  box-shadow: inset 0px 0px 0px 3px rgb(255, 145, 0);
 }
 .co2 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(255, 251, 0);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(255, 251, 0);
-  box-shadow: inset 0px 0px 0px 2px rgb(255, 251, 0);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(255, 232, 27);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(255, 232, 27);
+  box-shadow: inset 0px 0px 0px 3px rgb(255, 232, 27);
 }
 .co3 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(102, 255, 0);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(102, 255, 0);
-  box-shadow: inset 0px 0px 0px 2px rgb(102, 255, 0);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(102, 255, 0);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(102, 255, 0);
+  box-shadow: inset 0px 0px 0px 3px rgb(102, 255, 0);
 }
 .co4 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(0, 140, 255);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(0, 140, 255);
-  box-shadow: inset 0px 0px 0px 2px rgb(0, 140, 255);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(0, 140, 255);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(0, 140, 255);
+  box-shadow: inset 0px 0px 0px 3px rgb(0, 140, 255);
 }
 .co5 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(76, 0, 255);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(76, 0, 255);
-  box-shadow: inset 0px 0px 0px 2px rgb(76, 0, 255);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(47, 0, 156);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(47, 0, 156);
+  box-shadow: inset 0px 0px 0px 3px rgb(47, 0, 156);
 }
 .co6 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(162, 0, 255);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(162, 0, 255);
-  box-shadow: inset 0px 0px 0px 2px rgb(162, 0, 255);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(162, 0, 255);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(162, 0, 255);
+  box-shadow: inset 0px 0px 0px 3px rgb(162, 0, 255);
 }
 .co7 {
-  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 170);
-  -moz-box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 170);
-  box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 170);
+  -webkit-box-shadow: inset 0px 0px 0px 3px rgb(87, 0, 72);
+  -moz-box-shadow: inset 0px 0px 0px 3px rgb(87, 0, 72);
+  box-shadow: inset 0px 0px 0px 3px rgb(87, 0, 72);
 }
 #used {
   background-color: rgba(133, 133, 133, 0.322) !important;
@@ -82,6 +143,7 @@ body {
 }
 
 .InfoBoard {
+  pointer-events: none;
   height: 300px;
   width: 160px;
   position: fixed;
@@ -89,8 +151,8 @@ body {
   right: 0;
   top: 10%;
   color: #eee;
-  background-color: rgba(0, 0, 0, 0.65);
-  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
   padding: 10px;
 }
 .GameBoard {

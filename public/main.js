@@ -9,6 +9,13 @@
   var title = document.getElementsByClassName("title");
   var lastClicked;
   var multiClicked = [];
+  var init = document.getElementsByClassName("initial")[0];
+  init.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      var stv = event.srcElement.value;
+      if (stv.length > 2 && stv.length < 11) init.remove();
+    }
+  });
   socket.on("init", function(e) {
     socket_local_id = e.idx;
     for (var i = 0; i < 60; i++) {
@@ -42,18 +49,26 @@
     }[${socket_local_id}] (online: ${e.cnt})`;
     var strv = "";
     e.v.forEach((x, index) => {
-      if(index > 6) break;
+      //if(index > 6) break;
       strv += `<div class="row">${index + 1}. ${x.substring(0, 5)}...</div>`;
     });
     infoBoard[0].innerHTML = strv;
   });
-
+  socket.on("scoreget", function(e) {
+    if (e.includes("+")) addv("Area extension (" + e + ")", 0);
+    else if (e.includes("*"))
+      addv("Mine Detection Fail (" + e.replace("*", "-") + ")", 1);
+    else if (e.includes("/"))
+      addv("Build Flag Successfully (" + e.replace("/", "+") + ")", 0);
+    else addv("Fail to build flag (" + e + ")");
+  });
   /* On SocketBroad */
   socket.on("setflag", function(e) {
     var _ = document.getElementById(e.pos);
     if (e.res !== 0) _.innerHTML = e.res;
     else _.innerHTML = "";
     _.style.cssText = "background: rgba(133, 133, 133, 0.322)";
+
     // _.id = "";
   });
 
