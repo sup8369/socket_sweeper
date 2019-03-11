@@ -41,7 +41,15 @@ body {
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.75);
+
   text-align: center;
+}
+.initial > p {
+  position: fixed;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  bottom: 30px;
 }
 .initial > input {
   border: 0;

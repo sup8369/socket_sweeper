@@ -44,9 +44,9 @@
 
   /* Player Joined */
   socket.on("joined", function(e) {
-    title[0].innerHTML = `socket Id: ${
+    title[0].innerHTML = `SOCK_ID: ${
       socket.id
-    }[${socket_local_id}] (online: ${e.cnt})`;
+    } / CLID: ${socket_local_id} / ONLINE: ${e.cnt}`;
     var strv = "";
     e.v.forEach((x, index) => {
       //if(index > 6) break;

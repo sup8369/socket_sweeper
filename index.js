@@ -127,15 +127,14 @@ io.on("connection", function(socket) {
         resSign = "💣";
 
         io.emit("setflag", { pos: e, res: resSign });
+        alluserscore[allusers.indexOf(socket.id)] -= 10;
         socket.emit("scoreget", "*10");
       } else {
         var a = Math.floor(Math.random() * 60000);
         frArea[a] = 0;
         process(parseInt(sp[0]), parseInt(sp[1]), io, a);
+        alluserscore[allusers.indexOf(socket.id)] += frArea[a];
         socket.emit("scoreget", "+" + frArea[a]);
-        //resSign = cnt;
-        //gameBoard[parseInt(sp[0])][parseInt(sp[1])] = parseInt(cnt) + 1;
-        //remove life
       }
     }
   });
@@ -148,13 +147,12 @@ io.on("connection", function(socket) {
       if (servBoard[parseInt(sp[0])][parseInt(sp[1])] === -2) {
         gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -1;
         resSign = "🚩";
+        alluserscore[allusers.indexOf(socket.id)] += 2;
         socket.emit("scoreget", "/2");
         io.emit("setflag", { pos: e, res: resSign });
       } else {
         socket.emit("scoreget", "-5");
-        //gameBoard[parseInt(sp[0]) - 1][parseInt(sp[1]) - 1] = -2;
-        //resSign = "💣";
-        //remove life
+        alluserscore[allusers.indexOf(socket.id)] -= 5;
       }
     }
   });
