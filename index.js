@@ -6,7 +6,8 @@ const port = 3000;
 var users = [],
   allusers = [],
   cursors = [],
-  alluserscore = [],
+  allusername = [],
+  alluserscore = [0],
   blockOpened = 0,
   servBoard = new Array(60),
   gameBoard = new Array(60),
@@ -114,7 +115,18 @@ io.on("connection", function(socket) {
   socket.emit("init", { idx: allusers.indexOf(socket.id), svd: gameBoard });
   io.emit("joined", {
     cnt: io.engine.clientsCount,
-    v: users
+    v: users,
+    av: allusers,
+    avs: alluserscore,
+    avn: allusername
+  });
+  console.log(alluserscore);
+
+  socket.on("naming", function(e) {
+    console.log(e);
+    allusername[allusers.indexOf(socket.id)] = e;
+    alluserscore[allusers.indexOf(socket.id)] = 0;
+    io.emit("usernaming", allusername);
   });
   socket.on("findz", function(e) {
     var sp = e.split(",");
@@ -134,6 +146,7 @@ io.on("connection", function(socket) {
         frArea[a] = 0;
         process(parseInt(sp[0]), parseInt(sp[1]), io, a);
         alluserscore[allusers.indexOf(socket.id)] += frArea[a];
+        io.emit("scorepath", alluserscore);
         socket.emit("scoreget", "+" + frArea[a]);
       }
     }
@@ -148,9 +161,12 @@ io.on("connection", function(socket) {
         gameBoard[parseInt(sp[0])][parseInt(sp[1])] = -1;
         resSign = "🚩";
         alluserscore[allusers.indexOf(socket.id)] += 2;
+        io.emit("scorepath", alluserscore);
         socket.emit("scoreget", "/2");
+        io.emit("scorepath", alluserscore);
         io.emit("setflag", { pos: e, res: resSign });
       } else {
+        io.emit("scorepath", alluserscore);
         socket.emit("scoreget", "-5");
         alluserscore[allusers.indexOf(socket.id)] -= 5;
       }

@@ -8,13 +8,67 @@
   var infoBoard = document.getElementsByClassName("InfoBoard");
   var title = document.getElementsByClassName("title");
   var lastClicked;
+  var alluser, alluserscore, allusername, currentuser;
   var multiClicked = [];
   var init = document.getElementsByClassName("initial")[0];
   init.addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
-      var stv = event.srcElement.value;
-      if (stv.length > 2 && stv.length < 11) init.remove();
+      var stv = event.srcElement.value + "";
+      if (stv.length > 2 && stv.length < 11) {
+        socket.emit("naming", stv);
+        init.remove();
+      }
     }
+  });
+  socket.on("scorepath", function(e) {
+    alluserscore = e;
+    var strv = "";
+    currentuser.forEach((x, index) => {
+      if (index > 10) return;
+      if (x === socket.id) {
+        strv += `<div class="row"><font color="#00ff00">${index + 1}. ${
+          allusername[alluser.indexOf(x)]
+        } (${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }) </font></div>`;
+      } else {
+        strv += `<div class="row">${index + 1}. ${
+          allusername[alluser.indexOf(x)]
+        } (${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }) </div>`;
+      }
+    });
+    infoBoard[0].innerHTML = strv;
+  });
+  socket.on("usernaming", function(e) {
+    allusername = e;
+    var strv = "";
+    currentuser.forEach((x, index) => {
+      if (index > 10) return;
+      if (x === socket.id) {
+        strv += `<div class="row"><font color="#00ff00">${index + 1}. ${
+          allusername[alluser.indexOf(x)]
+        } (${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }) </font></div>`;
+      } else {
+        strv += `<div class="row">${index + 1}. ${
+          allusername[alluser.indexOf(x)]
+        } (${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }) </div>`;
+      }
+    });
+    infoBoard[0].innerHTML = strv;
   });
   socket.on("init", function(e) {
     socket_local_id = e.idx;
@@ -43,16 +97,15 @@
   });
 
   /* Player Joined */
+
   socket.on("joined", function(e) {
     title[0].innerHTML = `SOCK_ID: ${
       socket.id
     } / CLID: ${socket_local_id} / ONLINE: ${e.cnt}`;
-    var strv = "";
-    e.v.forEach((x, index) => {
-      //if(index > 6) break;
-      strv += `<div class="row">${index + 1}. ${x.substring(0, 5)}...</div>`;
-    });
-    infoBoard[0].innerHTML = strv;
+    currentuser = e.v;
+    alluser = e.av;
+    alluserscore = e.avs;
+    allusername = e.avn;
   });
   socket.on("scoreget", function(e) {
     if (e.includes("+")) addv("Area extension (" + e + ")", 0);
