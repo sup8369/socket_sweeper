@@ -140,6 +140,7 @@ io.on("connection", function(socket) {
 
         io.emit("setflag", { pos: e, res: resSign });
         alluserscore[allusers.indexOf(socket.id)] -= 10;
+        io.emit("scorepath", alluserscore);
         socket.emit("scoreget", "*10");
       } else {
         var a = Math.floor(Math.random() * 60000);
