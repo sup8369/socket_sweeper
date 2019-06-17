@@ -1,5 +1,8 @@
 # Socket.IO Collaborative MineSweeper
 
+[DEMO](http://54.180.114.105:7701) (Reset Every 1hours)
+
+
 A simple collaborative MineSweeper for socket.io
 
 ## How to use
