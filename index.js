@@ -14,13 +14,14 @@ var users = [],
   checkBoard = new Array(60),
   userBoard = new Array(60),
   frArea = [];
-
+function resetting() {
+  io.emit("reset");
+  initializing();
+}
+setInterval(resetting, 1000 * 60 * 60);
 function initializing() {
-  (users = []),
-    (alluserscore = []),
-    (allusers = []),
-    (cursors = []),
-    (blockOpened = 0);
+  (allusername = []), (users = []), (frArea = []);
+  (alluserscore = []), (allusers = []), (cursors = []), (blockOpened = 0);
   for (i = 0; i < 60; i++) {
     gameBoard[i] = new Array(32);
     userBoard[i] = new Array(32);

@@ -26,7 +26,11 @@
     currentuser.forEach((x, index) => {
       if (index > 10) return;
       if (x === socket.id) {
-        strv += `<div class="row"><font color="#00ff00">${index + 1}. ${
+        strv += `<div class="row" id="${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }"><font color="#00ff00">${index + 1}. ${
           allusername[alluser.indexOf(x)]
         } (${
           alluserscore[alluser.indexOf(x)] === undefined
@@ -34,9 +38,11 @@
             : alluserscore[alluser.indexOf(x)]
         }) </font></div>`;
       } else {
-        strv += `<div class="row">${index + 1}. ${
-          allusername[alluser.indexOf(x)]
-        } (${
+        strv += `<div class="row" id="${
+          alluserscore[alluser.indexOf(x)] === undefined
+            ? "0"
+            : alluserscore[alluser.indexOf(x)]
+        }">${index + 1}. ${allusername[alluser.indexOf(x)]} (${
           alluserscore[alluser.indexOf(x)] === undefined
             ? "0"
             : alluserscore[alluser.indexOf(x)]
@@ -44,6 +50,22 @@
       }
     });
     infoBoard[0].innerHTML = strv;
+    var toSort = document.getElementsByClassName("InfoBoard")[0].children;
+    toSort = Array.prototype.slice.call(toSort, 0);
+
+    toSort.sort(function(a, b) {
+      var aord = +a.id;
+      var bord = +b.id;
+      // two elements never have the same ID hence this is sufficient:
+      return aord > bord ? -1 : 1;
+    });
+
+    var parent = document.getElementsByClassName("InfoBoard")[0];
+    parent.innerHTML = "";
+
+    for (var i = 0, l = toSort.length; i < l; i++) {
+      parent.appendChild(toSort[i]);
+    }
   });
   socket.on("usernaming", function(e) {
     allusername = e;
@@ -69,6 +91,9 @@
       }
     });
     infoBoard[0].innerHTML = strv;
+  });
+  socket.on("reset", function(e) {
+    location.reload();
   });
   socket.on("init", function(e) {
     socket_local_id = e.idx;
@@ -99,9 +124,7 @@
   /* Player Joined */
 
   socket.on("joined", function(e) {
-    title[0].innerHTML = `SOCK_ID: ${
-      socket.id
-    } / CLID: ${socket_local_id} / ONLINE: ${e.cnt}`;
+    title[0].innerHTML = `LOCAL_ID: ${socket_local_id} / ONLINE: ${e.cnt}`;
     currentuser = e.v;
     alluser = e.av;
     alluserscore = e.avs;
