@@ -10,7 +10,7 @@
   "dependencies": {
     "dragscroll": "0.0.8",
     "ejs": "^2.6.1",
-    "express": "4.16.x",
+    "express": "4.17.x",
     "socket.io": "latest"
   },
   "scripts": {
